@@ -107,6 +107,8 @@ export interface Buff {
 export interface Spell {
     level: number;
     expiresAt: number;
+    getCooldown(): number;
+    isReady(): boolean;
 }
 
 export interface Vector2 {
@@ -156,6 +158,7 @@ export interface GameObject extends DDragonUnit {
     buffEntryEnd: number;
 
     isAlive(): boolean;
+    isDead(): boolean;
     getBuffManager(): Map<string, Buff>
     getSpellBook(): Map<SpellSlot, Spell>
     getUnitType(): UnitType;
@@ -173,6 +176,7 @@ export interface Game {
 }
 
 export interface SDK {
+    on(event: 'draw' | 'tick', handler: Function): void;
     getAPIFunction(plugin: PluginSettings, name: string): Function | undefined;
     registerAPIFunction(plugin: PluginSettings, api: APIFunction): void;
 }
@@ -181,5 +185,4 @@ declare global {
     const sdk: SDK;
     const renderer: Renderer;
     const game: Game;
-    
 }
