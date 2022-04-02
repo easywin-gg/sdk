@@ -56,10 +56,6 @@ export enum UnitTag {
     Unit_Ward = 55,
 }
 
-export type RecallInfo = {
-    displayName: string;
-    duration: number;
-}
 
 export enum SpellSlot {
     Q = 'Q',
@@ -97,6 +93,11 @@ export interface Vector4 {
     w: number;
 }
 
+export interface RecallInfo {
+    displayName: string;
+    duration: number;
+}
+
 export interface PluginSettings {
     name: string;
     version: number;
@@ -106,12 +107,6 @@ export interface PluginSettings {
 export interface APIFunction {
     name: string;
     handler: Function;
-}
-
-export interface Renderer {
-    height: number;
-    width: number;
-    worldToScreen(position: Vector3): Vector2;
 }
 
 export interface DDragonUnit {
@@ -162,24 +157,33 @@ export interface GameObject extends DDragonUnit {
 
     isAlive(): boolean;
     isDead(): boolean;
+    // WARNING: This is a very expensive function and cause garbage collection. Use it with caution.
     getBuffManager(): Map<string, Buff>
+    // WARNING: This is a very expensive function and cause garbage collection. Use it with caution.
     getSpellBook(): Map<SpellSlot, Spell>
     getUnitType(): UnitType;
 }
 
-export interface Game {
-    objects: Map<number, GameObject>;
-    champions: Set<GameObject>;
-
-    getGameTime(): number;
+export interface ObjectManager {
     getLocalPlayer(): GameObject;
+    getObjectByNetworkId(id: number): GameObject | undefined;
     getHeroes(): GameObject[];
-    getAllyHeroes(): GameObject[];
     getEnemyHeroes(): GameObject[];
+    getAllyHeroes(): GameObject[];
+    getTurrets(): GameObject[];
+    getEnemyTurrets(): GameObject[];
+    getAllyTurrets(): GameObject[];
+}
+
+export interface Renderer {
+    height: number;
+    width: number;
+    worldToScreen(position: Vector3): Vector2;
 }
 
 export interface SDK {
     on(event: 'draw' | 'tick', handler: Function): void;
+    getGameTime(): number;
     getAPIFunction(plugin: PluginSettings, name: string): Function | undefined;
     registerAPIFunction(plugin: PluginSettings, api: APIFunction): void;
 }
@@ -188,5 +192,5 @@ declare global {
     const recallStateType: Map<number, RecallInfo>;
     const sdk: SDK;
     const renderer: Renderer;
-    const game: Game;
+    const objectManager: ObjectManager;
 }
