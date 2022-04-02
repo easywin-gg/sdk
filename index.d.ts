@@ -54,7 +54,7 @@ export enum UnitTag {
     Unit_Structure_Turret_Outer = 53,
     Unit_Structure_Turret_Shrine = 54,
     Unit_Ward = 55,
-};
+}
 
 export type RecallInfo = {
     displayName: string;
@@ -70,45 +70,13 @@ export enum SpellSlot {
     F = 'F'
 }
 
-export interface PluginSettings {
-    name: string;
-    version: number;
-    author: string;
-}
-
-export interface APIFunction {
-    name: string;
-    handler: Function;
-}
-
-export interface DDragonUnit {
-    name: string;
-    healthBarHeight: number;
-    baseMoveSpeed: number;
-    baseAttackRange: number;
-    baseAttackSpeed: number;
-    attackSpeedRatio: number;
-    acquisitionRange: number;
-    selectionRadius: number;
-    pathingRadius: number;
-    gameplayRadius: number;
-    basicAtkMissileSpeed: number;
-    basicAtkWindup: number;
-    purchaseIdentities: string[];
-    tags: UnitTag[] = [];
-}
-
-export interface Buff {
-    name: string;
-    count: number;
-    expiresAt: number;
-}
-
-export interface Spell {
-    level: number;
-    expiresAt: number;
-    getCooldown(): number;
-    isReady(): boolean;
+export enum UnitType {
+    CHAMPION = 0,
+    MINION = 1,
+    JUNGLE = 2,
+    TURRET = 3,
+    MISSILE = 4,
+    OTHER = 5
 }
 
 export interface Vector2 {
@@ -129,16 +97,54 @@ export interface Vector4 {
     w: number;
 }
 
+export interface PluginSettings {
+    name: string;
+    version: number;
+    author: string;
+}
+
+export interface APIFunction {
+    name: string;
+    handler: Function;
+}
+
 export interface Renderer {
     height: number;
     width: number;
     worldToScreen(position: Vector3): Vector2;
 }
 
-export interface GameObject extends DDragonUnit {
-    
-    static recallStateType: Map<number, RecallInfo>;
+export interface DDragonUnit {
+    name: string;
+    healthBarHeight: number;
+    baseMoveSpeed: number;
+    baseAttackRange: number;
+    baseAttackSpeed: number;
+    attackSpeedRatio: number;
+    acquisitionRange: number;
+    selectionRadius: number;
+    pathingRadius: number;
+    gameplayRadius: number;
+    basicAtkMissileSpeed: number;
+    basicAtkWindup: number;
+    purchaseIdentities: string[];
+    tags: UnitTag[];
+}
 
+export interface Buff {
+    name: string;
+    count: number;
+    expiresAt: number;
+}
+
+export interface Spell {
+    level: number;
+    expiresAt: number;
+    getCooldown(): number;
+    isReady(): boolean;
+}
+
+export interface GameObject extends DDragonUnit {
     id: number;
     networkId: number;
     team: number;
@@ -147,15 +153,12 @@ export interface GameObject extends DDragonUnit {
     maxHealth: number;
     isTargetable: boolean;
     isVisible: boolean;
-    interface: UnitType;
+    type: UnitType;
     level: number;
     spawnCount: number;
     attackSpeedMultiplier: number;
     attackRange: number;
     sizeMultiplier: number;
-    spellBook: number;
-    buffEntryStart: number;
-    buffEntryEnd: number;
 
     isAlive(): boolean;
     isDead(): boolean;
@@ -182,6 +185,7 @@ export interface SDK {
 }
 
 declare global {
+    const recallStateType: Map<number, RecallInfo>;
     const sdk: SDK;
     const renderer: Renderer;
     const game: Game;
