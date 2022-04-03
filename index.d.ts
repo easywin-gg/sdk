@@ -75,42 +75,41 @@ export enum UnitType {
     OTHER = 5
 }
 
-export interface Vector2 {
+export type Vector2 = {
     x: number;
     y: number;
 }
 
-export interface Vector3 {
+export type Vector3 = {
     x: number;
     y: number;
     z: number;
 }
 
-export interface Vector4 {
+export type Vector4 = {
     x: number;
     y: number;
     z: number;
     w: number;
 }
 
-export interface RecallInfo {
+export type RecallInfo = {
     displayName: string;
     duration: number;
 }
 
-export interface PluginSettings {
+export type PluginSettings = {
     name: string;
     version: number;
     author: string;
 }
 
-export interface APIFunction {
+export type APIFunction = {
     name: string;
     handler: Function;
 }
 
-export interface DDragonUnit {
-    name: string;
+export type DDragonUnit = {
     healthBarHeight: number;
     baseMoveSpeed: number;
     baseAttackRange: number;
@@ -126,46 +125,47 @@ export interface DDragonUnit {
     tags: UnitTag[];
 }
 
-export interface Buff {
+export type Buff = {
     name: string;
     count: number;
     expiresAt: number;
 }
 
-export interface Spell {
+export type Spell = {
     level: number;
     expiresAt: number;
     getCooldown(): number;
     isReady(): boolean;
 }
 
-export interface GameObject extends DDragonUnit {
-    id: number;
-    networkId: number;
-    team: number;
-    position: Vector3;
-    health: number;
-    maxHealth: number;
-    isTargetable: boolean;
-    isVisible: boolean;
-    type: UnitType;
-    level: number;
-    spawnCount: number;
-    attackSpeedMultiplier: number;
-    attackRange: number;
-    sizeMultiplier: number;
+export type GameObject = {
+    unit: DDragonUnit;
 
+    getNetworkId(): number;
+    getName(): string;
+    getTeam(): number;
+    getPosition(): Vector3;
+    getHealth(): number;
+    getMaxHealth(): number;
+    isTargetable(): boolean;
+    isVisible(): boolean;
+    getType(): UnitType;
+    getLevel(): number;
+    getSpawnCount(): number;
+    getAttackSpeedMultiplier(): number;
+    getAttackRange(): number;
+    getSizeMultiplier(): number;
     isAlive(): boolean;
     isDead(): boolean;
-    // WARNING: This is a very expensive function and cause garbage collection. Use it with caution.
+    getRecallState(): RecallInfo | undefined;
+    // WARNING: This is a very expensive function and cause memory leak. Use it with caution.   
     getBuffManager(): Map<string, Buff>
-    // WARNING: This is a very expensive function and cause garbage collection. Use it with caution.
+    // WARNING: This is a very expensive function and cause memory leak. Use it with caution.
     getSpellBook(): Map<SpellSlot, Spell>
     getUnitType(): UnitType;
 }
 
-export interface ObjectManager {
-    getLocalPlayer(): GameObject;
+export type ObjectManager = {
     getObjectByNetworkId(id: number): GameObject | undefined;
     getHeroes(): GameObject[];
     getEnemyHeroes(): GameObject[];
@@ -175,13 +175,21 @@ export interface ObjectManager {
     getAllyTurrets(): GameObject[];
 }
 
-export interface Renderer {
+export type Renderer = {
     height: number;
     width: number;
+
+    /**
+     * Point is a Vector2 i.e, you need to convert Vector3 to Vector2 using worldToScreen.
+     */
+    isInScreen(point: Vector2, offsetX?: number, offsetY?: number): boolean;
+    /**
+     * Convert League Position to Screen Position.
+     */
     worldToScreen(position: Vector3): Vector2;
 }
 
-export interface SDK {
+export type SDK = {
     on(event: 'draw' | 'tick', handler: Function): void;
     getGameTime(): number;
     getAPIFunction(plugin: PluginSettings, name: string): Function | undefined;
@@ -193,4 +201,5 @@ declare global {
     const sdk: SDK;
     const renderer: Renderer;
     const objectManager: ObjectManager;
+    const localPlayer: GameObject;
 }
