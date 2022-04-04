@@ -1,78 +1,77 @@
-export enum UnitTag {
-    Unit_ = 1,
-    Unit_Champion = 2,
-    Unit_Champion_Clone = 3,
-    Unit_IsolationNonImpacting = 4,
-    Unit_KingPoro = 5,
-    Unit_Minion = 6,
-    Unit_Minion_Lane = 7,
-    Unit_Minion_Lane_Melee = 8,
-    Unit_Minion_Lane_Ranged = 9,
-    Unit_Minion_Lane_Siege = 10,
-    Unit_Minion_Lane_Super = 11,
-    Unit_Minion_Summon = 12,
-    Unit_Minion_SummonName_game_character_displayname_ZyraSeed = 13,
-    Unit_Minion_Summon_Large = 14,
-    Unit_Monster = 15,
-    Unit_Monster_Blue = 16,
-    Unit_Monster_Buff = 17,
-    Unit_Monster_Camp = 18,
-    Unit_Monster_Crab = 19,
-    Unit_Monster_Dragon = 20,
-    Unit_Monster_Epic = 21,
-    Unit_Monster_Gromp = 22,
-    Unit_Monster_Krug = 23,
-    Unit_Monster_Large = 24,
-    Unit_Monster_Medium = 25,
-    Unit_Monster_Raptor = 26,
-    Unit_Monster_Red = 27,
-    Unit_Monster_Wolf = 28,
-    Unit_Plant = 29,
-    Unit_Special = 30,
-    Unit_Special_AzirR = 31,
-    Unit_Special_AzirW = 32,
-    Unit_Special_CorkiBomb = 33,
-    Unit_Special_EpicMonsterIgnores = 34,
-    Unit_Special_KPMinion = 35,
-    Unit_Special_MonsterIgnores = 36,
-    Unit_Special_Peaceful = 37,
-    Unit_Special_SyndraSphere = 38,
-    Unit_Special_TeleportTarget = 39,
-    Unit_Special_Trap = 40,
-    Unit_Special_Tunnel = 41,
-    Unit_Special_TurretIgnores = 42,
-    Unit_Special_UntargetableBySpells = 43,
-    Unit_Special_Void = 44,
-    Unit_Special_YorickW = 45,
-    Unit_Structure = 46,
-    Unit_Structure_Inhibitor = 47,
-    Unit_Structure_Nexus = 48,
-    Unit_Structure_Turret = 49,
-    Unit_Structure_Turret_Inhib = 50,
-    Unit_Structure_Turret_Inner = 51,
-    Unit_Structure_Turret_Nexus = 52,
-    Unit_Structure_Turret_Outer = 53,
-    Unit_Structure_Turret_Shrine = 54,
-    Unit_Ward = 55,
+export type UnitTag = {
+    Unit_: number;
+    Unit_Champion: number;
+    Unit_Champion_Clone: number;
+    Unit_IsolationNonImpacting: number;
+    Unit_KingPoro: number;
+    Unit_Minion: number;
+    Unit_Minion_Lane: number;
+    Unit_Minion_Lane_Melee: number;
+    Unit_Minion_Lane_Ranged: number;
+    Unit_Minion_Lane_Siege: number;
+    Unit_Minion_Lane_Super: number;
+    Unit_Minion_Summon: number;
+    Unit_Minion_SummonName_game_character_displayname_ZyraSeed: number;
+    Unit_Minion_Summon_Large: number;
+    Unit_Monster: number;
+    Unit_Monster_Blue: number;
+    Unit_Monster_Buff: number;
+    Unit_Monster_Camp: number;
+    Unit_Monster_Crab: number;
+    Unit_Monster_Dragon: number;
+    Unit_Monster_Epic: number;
+    Unit_Monster_Gromp: number;
+    Unit_Monster_Krug: number;
+    Unit_Monster_Large: number;
+    Unit_Monster_Medium: number;
+    Unit_Monster_Raptor: number;
+    Unit_Monster_Red: number;
+    Unit_Monster_Wolf: number;
+    Unit_Plant: number;
+    Unit_Special: number;
+    Unit_Special_AzirR: number;
+    Unit_Special_AzirW: number;
+    Unit_Special_CorkiBomb: number;
+    Unit_Special_EpicMonsterIgnores: number;
+    Unit_Special_KPMinion: number;
+    Unit_Special_MonsterIgnores: number;
+    Unit_Special_Peaceful: number;
+    Unit_Special_SyndraSphere: number;
+    Unit_Special_TeleportTarget: number;
+    Unit_Special_Trap: number;
+    Unit_Special_Tunnel: number;
+    Unit_Special_TurretIgnores: number;
+    Unit_Special_UntargetableBySpells: number;
+    Unit_Special_Void: number;
+    Unit_Special_YorickW: number;
+    Unit_Structure: number;
+    Unit_Structure_Inhibitor: number;
+    Unit_Structure_Nexus: number;
+    Unit_Structure_Turret: number;
+    Unit_Structure_Turret_Inhib: number;
+    Unit_Structure_Turret_Inner: number;
+    Unit_Structure_Turret_Nexus: number;
+    Unit_Structure_Turret_Outer: number;
+    Unit_Structure_Turret_Shrine: number;
+    Unit_Ward: number;
 }
 
-
-export enum SpellSlot {
-    Q = 'Q',
-    W = 'W',
-    E = 'E',
-    R = 'R',
-    D = 'D',
-    F = 'F'
+export type SpellSlot = {
+    Q: number;
+    W: number;
+    E: number;
+    R: number;
+    D: number;
+    F: number;
 }
 
-export enum UnitType {
-    CHAMPION = 0,
-    MINION = 1,
-    JUNGLE = 2,
-    TURRET = 3,
-    MISSILE = 4,
-    OTHER = 5
+export type UnitType = {
+    CHAMPION: number;
+    MINION: number;
+    JUNGLE: number;
+    TURRET: number;
+    MISSILE: number;
+    OTHER: number;
 }
 
 export type Vector2 = {
@@ -131,11 +130,21 @@ export type Buff = {
     expiresAt: number;
 }
 
+
 export type Spell = {
     level: number;
     expiresAt: number;
     getCooldown(): number;
     isReady(): boolean;
+}
+
+export type BuffManager = {
+    getBuff(name: string): Buff;
+}
+
+export type SpellBook = {
+    getSpell(slot: number): Spell;
+    canUseSpell(slot: number): boolean;
 }
 
 export type GameObject = {
@@ -159,9 +168,9 @@ export type GameObject = {
     isDead(): boolean;
     getRecallState(): RecallInfo | undefined;
     // WARNING: This is a very expensive function and cause memory leak. Use it with caution.   
-    getBuffManager(): Map<string, Buff>
+    getBuffManager(): BuffManager;
     // WARNING: This is a very expensive function and cause memory leak. Use it with caution.
-    getSpellBook(): Map<SpellSlot, Spell>
+    getSpellBook(): SpellBook;
     getUnitType(): UnitType;
 }
 
@@ -196,8 +205,13 @@ export type SDK = {
     registerAPIFunction(plugin: PluginSettings, api: APIFunction): void;
 }
 
+
 declare global {
     const recallStateType: Map<number, RecallInfo>;
+    const SpellSlot: SpellSlot;
+    const UnitTag: UnitTag;
+    const UnitType: UnitType;
+
     const sdk: SDK;
     const renderer: Renderer;
     const objectManager: ObjectManager;
